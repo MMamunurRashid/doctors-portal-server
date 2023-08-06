@@ -179,10 +179,16 @@ async function run() {
       res.send({ isAdmin: user?.role === "admin" });
     });
 
-    app.post("/users", async (req, res) => {
-      const user = req.body;
-      const result = await usersCollection.insertOne(user);
-      res.send(result);
+        app.post("/users", async (req, res) => {
+      const {name, email} = req.body;
+      // console.log(user);
+      const existingUser = await usersCollection.findOne({ email });
+
+      if (existingUser) {
+          return 
+      }else{const result = await usersCollection.insertOne(user);
+      res.send(result);}
+      
     });
 
     app.put("/users/admin/:id", verifyJWT, verifyAdmin, async (req, res) => {
